@@ -10,34 +10,28 @@ class KMNISTRun:
                 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と',
                 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ',
                 'ま', 'み', 'む', 'め', 'も', 'や', 'ゆ', 'よ', 'ら', 'り',
-                'る', 'れ', 'ろ', 'わ', 'を', 'ん', 'ゝ', 'ゞ', 'ー']
+                'る', 'れ', 'ろ', 'わ', 'を', 'う', 'い', 'ゞ', 'あ']
         
         self.model = models.load_model(self.model_path)
 
     def preprocess_image(self, image_path):
-        # Load image using OpenCV
         image = cv2.imread(image_path)
-        # Preprocess image (resize, normalize, etc.)
-        # This preprocessing should match the preprocessing done during training
+
         grayscale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # Resize image to match the input size expected by the model
         resized_image = cv2.resize(grayscale_image, (28, 28))
-        # Add channel dimension to the image
         reshaped_image = resized_image[..., np.newaxis]
-        # Normalize pixel values
+
         normalized_image = reshaped_image / 255.0
         return normalized_image
 
 
     def predict_image(self, image_path):
-        # Preprocess the image
         preprocessed_image = self.preprocess_image(image_path)
-        # Reshape and normalize the image
+        
         input_data = np.expand_dims(preprocessed_image, axis=0)
-        input_data = input_data / 255.0  # Normalize pixel values if necessary
-        # Make prediction
+        input_data = input_data / 255.0
+        
         prediction = self.model.predict(input_data)
-        # Process prediction...
         return prediction
 
     def interpret_prediction(self, prediction):
@@ -51,22 +45,17 @@ class KMNISTRun:
         image_paths = ['./images/1.jpg', './images/2.jpg', './images/3.jpg', './images/4.jpg', './images/5.jpg', './images/6.jpg', './images/7.jpg']
 
         for image_path in image_paths:
-            # Load the image
             image = cv2.imread(image_path)[:,:,0]
             
-            # Display the image
             image = np.invert(np.array([image]))
             
             plt.imshow(image[0], cmap=plt.cm.binary)
             plt.show()
             
-            # Make prediction
             prediction = self.predict_image(image_path)
             
-            # Process prediction
             predicted_character = model.interpret_prediction(prediction)
             print(f'O Hiragana digitado foi: {predicted_character}')
 
-# Create an instance of the model
 model = KMNISTRun()
 model.show_prediction()

@@ -14,13 +14,6 @@ class KMNISTModel:
             layers.Dense(128, activation='relu'),
             layers.Dense(49, activation='softmax')
         ])
-        
-        # model = models.Sequential([
-        #     layers.Flatten(input_shape=(28, 28)),
-        #     layers.Dense(128, activation='relu'),
-        #     layers.Dense(128, activation='relu'),
-        #     layers.Dense(49, activation='softmax')
-        # ])
         model.compile(optimizer='adam',
                       loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])
@@ -29,9 +22,7 @@ class KMNISTModel:
     def save_model(self, save_path):
         self.model.save(save_path)
 
-    @classmethod
     def load_model(cls, saved_model_path):
-        # Load the saved model
         loaded_model = cls()
         loaded_model.model = models.load_model(saved_model_path)
         return loaded_model

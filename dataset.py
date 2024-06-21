@@ -8,6 +8,5 @@ class KMNISTDataset:
         self.test_labels = np.load(test_labels_path)['arr_0']
 
     def preprocess(self):
-        # Normalize pixel values to the range [0, 1]
         self.train_images = self.train_images.astype('float32') / 255.0
         self.test_images = self.test_images.astype('float32') / 255.0
